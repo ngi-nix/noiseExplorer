@@ -2,7 +2,7 @@
   description = "Commandline tool for testing Noise Protocol for parse Noise Handshake Patterns";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "nixpkgs/nixos-unstable";
   };
 
   outputs = { self, nixpkgs }:
