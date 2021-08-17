@@ -38,7 +38,7 @@
             overlays = [ self.overlay ];
           };
 
-          nodeDependencies = (pkgs.callPackage ./noiseExplorer/dep.nix {}).shell.nodeDependencies;
+          nodeDependencies = (pkgs.callPackage ./noiseExplorer/dep.nix { }).shell.nodeDependencies;
         in
         pkgs.mkShell {
 
@@ -66,9 +66,12 @@
           format = pkgs.runCommand "check-format"
             {
               buildInputs = with pkgs; [ cargo nodejs go rustc wasm wasm-pack ];
-            } ''
-            touch $out # it worked!
-          '';
+            }
+            ''
+              ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check ${./.}
+              touch $out
+              #nixpkgs-fmt check sucessfull
+            '';
         });
     };
 }
