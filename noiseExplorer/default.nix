@@ -1,9 +1,7 @@
 { stdenv, lib, fetchgit, fetchurl, nodejs, pkgs }:
-let
-  nodeDependencies = (pkgs.callPackage ./dep.nix { }).shell.nodeDependencies;
-in
+let nodeDependencies = (pkgs.callPackage ./dep.nix { }).shell.nodeDependencies;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "NoiseExplorer";
 
   version = "1.0.3";
@@ -28,11 +26,15 @@ stdenv.mkDerivation rec {
     bash genHtml.sh
   '';
 
-
   installPhase = ''
     mkdir -p $out/bin
     cd ../../
     cp -vr . $out
-    cp ${pkgs.writeScript "noiseexplorer" ''${nodejs}/bin/node ${src}/src/noiseExplorer.js $0 $1 $2''} $out/bin/noiseexplorer
+    ln -s ${nodeDependencies}/lib/node_modules $out/src/node_modules
+    printf "${nodejs}/bin/node" > $out/bin/noiseexplorer 
+    printf " $out/src/noiseExplorer.js \$0 \$1 \$2" >>$out/bin/noiseexplorer
+    chmod +x $out/bin/noiseexplorer
   '';
+
 }
+
